@@ -57,6 +57,8 @@ const getPageNumber = (y, pageHeight) => Math.floor(y / pageHeight);
 const getPositionOnPage = (y, pageHeight) => y % pageHeight;
 const getBlockOffset = (yO, pageHeight, pagePaddingTop) =>
   pageHeight - getPositionOnPage(yO, pageHeight) + pagePaddingTop;
+const getDistanceToFooterStart = (y, pageHeight, footerHeight) =>
+  pageHeight - getPositionOnPage(y, pageHeight) - footerHeight;
 const isSamePage = (dims, pageHeight) => {
   const pageStart = getPageNumber(dims.y, pageHeight);
   const pageEnd = getPageNumber(dims.y + dims.height, pageHeight);
@@ -114,6 +116,24 @@ const moveBlocks = (dimensions, refs, measures, pixelDensity) => {
             pageHeightPx,
             pagePaddingTopPx
           );
+        } else if ((ref.className || '').includes('Can-Break')) {
+          // this block can break
+          // height of first part
+          const heightFirstPart = getDistanceToFooterStart(
+            y,
+            pageHeightPx,
+            footerHeightPx
+          );
+          const paddingTopSecondPart = footerHeightPx + pagePaddingTopPx;
+          const heightSecondPart = height - heightFirstPart;
+          const updatedLayout = {
+            heightFirstPart,
+            paddingTopSecondPart,
+            heightSecondPart,
+          };
+          if (ref.updateLayout) {
+            ref.updateLayout(updatedLayout);
+          }
         } else {
           target = ref;
           newBlockOffset = getBlockOffset(y, pageHeightPx, pagePaddingTopPx);

@@ -1,5 +1,6 @@
 import * as React from 'react';
 import classnames from 'classnames';
+import styled from 'styled-components';
 
 const DimensionContext = React.createContext('INITIAL');
 
@@ -43,5 +44,56 @@ const withDimensions = (Component, className) => (props) => {
   );
 };
 
+// working on breaking block
+const BreakingBlock = ({ children, className }) => {
+  const [breaking, setBreaking] = React.useState(false);
+  const [height, setHeight] = React.useState(null);
+
+  const updateLayout = (values) => {
+    console.log('Received updated layout', values);
+    setHeight(values.h);
+    // set
+  };
+
+  return (
+    <div className={className}>
+      {/* render the children */}
+      {!breaking && <div>{children}</div>}
+      <>
+        {/* render new layout if breaking */}
+        {breaking && (
+          <div>
+            <div className="BreakingBlock-start">{children}</div>
+            <div
+              className="BreakingBlock-end"
+              style={{ textTransform: 'uppercase' }}
+            >
+              {children}
+            </div>
+          </div>
+        )}
+      </>
+    </div>
+  );
+};
+const StyledBreakingBlock = styled(BreakingBlock)`
+  .BreakingBlock-start {
+    background: yellow;
+    height: 30%;
+    overflow: hidden;
+    position: relative;
+  }
+  .BreakingBlock-end {
+    background: green;
+    height: 70%;
+    overflow: hidden;
+    position: relative;
+  }
+`;
+
 export default withDimensions;
-export { DimensionContextProvider, DimensionContextConsumer };
+export {
+  DimensionContextProvider,
+  DimensionContextConsumer,
+  StyledBreakingBlock as BreakingBlock,
+};
