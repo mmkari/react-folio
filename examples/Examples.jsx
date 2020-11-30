@@ -37,50 +37,6 @@ const PrintButton = styled.button.attrs({ className: 'PrintButton' })`
   }
 `;
 
-const BreakingBlock = ({ children, className }) => {
-  return (
-    <div className={className}>
-      <div className="BreakingBlockVoid" />
-      {children}
-    </div>
-  );
-};
-
-const StyledBreakingBlock = styled(BreakingBlock).attrs({
-  className: 'BreakingBlock',
-})`
-  // line-height: 50px;
-  // position: relative;
-  // display: block;
-  color: yellow;
-  width: 100%;
-  background: rgba(100, 100, 100, 0.2);
-  // shape-outside: polygon(0 0, 100% 0, 100% 50%, 0 50%);
-  // shape-outside: inset(20% 0 10% 0);
-  background: #00ddee44;
-  // height: 250px;
-  height: ${({ pageHeight }) => pageHeight}mm;
-
-
-  .BreakingBlockVoid {
-    width: 90%;
-    // height: 100%;
-    // width: 50px;
-    // height: 48mm;
-  height: ${({ pageHeight }) => pageHeight}mm;
-  // height: ${({ footerHeight }) => footerHeight}mm;
-    background: black;
-    opacity: 0.2;
-    // shape-outside: inset(100px 0 50px 0);
-    // shape-outside: inset(${({ pageHeight, footerHeight }) =>
-      pageHeight - footerHeight}mm 0 0px 0);
-     shape-outside: inset(${({ pageHeight, footerHeight }) =>
-       pageHeight - footerHeight - 10}mm 0 20px 0);
-
-    float: left;
-    // top: ${({ pageHeight, footerHeight }) => pageHeight - footerHeight}mm;
-  }
-`;
 const WhiteBox = styled.div.attrs({ className: 'BOX' })`
   width: 70px;
   height: 290px;
@@ -110,20 +66,6 @@ class Examples extends React.Component {
               <Lorem />
               <WhiteBox />
             </StyledBreakingBlock2>
-            <StyledBreakingBlock pageHeight={297} footerHeight={12}>
-              <Lorem />
-              {/* <Lorem />
-              <Lorem />
-              <Lorem />
-              <Lorem />
-              <Lorem />
-              <Lorem />
-              <Lorem />
-              <Lorem />
-              <Lorem />
-              <Lorem />
-              <WhiteBox /> */}
-            </StyledBreakingBlock>
             <Lorem />
             <Lorem />
             <Lorem />
