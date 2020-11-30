@@ -38,8 +38,12 @@ const getRefDimensions = (refs) => {
   const bodyRect = document.body.getBoundingClientRect();
   refs.forEach((ref) => {
     // get dimensions
-    if (ref && ref.getBoundingClientRect) {
-      const rect = ref.getBoundingClientRect();
+    if (
+      ref &&
+      ref.elementRef.current &&
+      ref.elementRef.current.getBoundingClientRect
+    ) {
+      const rect = ref.elementRef.current.getBoundingClientRect();
       dims.push({
         ref,
         dims: { y: rect.top - bodyRect.top, height: rect.height },
@@ -79,6 +83,7 @@ const moveBlocks = (dimensions, refs, measures, pixelDensity) => {
   let pageHeightPx;
   let footerHeightPx;
   let pagePaddingTopPx;
+  let usePadding = false;
   if (dimensions && blocks) {
     // divide measured width with known mm-width to get px-density
 
@@ -95,6 +100,7 @@ const moveBlocks = (dimensions, refs, measures, pixelDensity) => {
         ref,
       } = block;
       const y = yOriginal + CUMULATIVE_OFFSET; // actual position after prior offsets
+
       if (
         !isSamePage({ y, height }, pageHeightPx) ||
         isEndInFooter({ y, height }, pageHeightPx, footerHeightPx)
@@ -106,7 +112,9 @@ const moveBlocks = (dimensions, refs, measures, pixelDensity) => {
         let newBlockOffset;
         if (
           previousBlock &&
-          (previousBlock.ref.className || '').includes('No-Orphan')
+          (previousBlock.ref.elementRef.current.className || '').includes(
+            'No-Orphan'
+          )
         ) {
           // move the previous block instead as it cannot orphaned at end of page
           target = previousBlock.ref;
@@ -116,7 +124,10 @@ const moveBlocks = (dimensions, refs, measures, pixelDensity) => {
             pageHeightPx,
             pagePaddingTopPx
           );
-        } else if ((ref.className || '').includes('Can-Break')) {
+          usePadding = true;
+        } else if (
+          (ref.elementRef.current.className || '').includes('Can-Break')
+        ) {
           // this block can break
           // height of first part
           const heightFirstPart = getDistanceToFooterStart(
@@ -130,16 +141,22 @@ const moveBlocks = (dimensions, refs, measures, pixelDensity) => {
             heightFirstPart,
             paddingTopSecondPart,
             heightSecondPart,
+            originalHeight: height,
           };
-          if (ref.updateLayout) {
-            ref.updateLayout(updatedLayout);
+          if (ref.childRef.current && ref.childRef.current.updateLayout) {
+            ref.childRef.current.updateLayout(updatedLayout);
           }
+          target = ref;
+          newBlockOffset = paddingTopSecondPart;
         } else {
           target = ref;
           newBlockOffset = getBlockOffset(y, pageHeightPx, pagePaddingTopPx);
+          usePadding = true;
         }
         CUMULATIVE_OFFSET += newBlockOffset;
-        target.style.paddingTop = `${newBlockOffset}px`;
+        if (usePadding) {
+          target.elementRef.current.style.paddingTop = `${newBlockOffset}px`;
+        }
       }
     });
     const offsetHeight = dimensions.height + CUMULATIVE_OFFSET;

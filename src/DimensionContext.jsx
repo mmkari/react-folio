@@ -27,14 +27,32 @@ const DimensionContextProvider = ({ children, getDims }) => {
 const DimensionContextConsumer = ({ children, className }) => {
   const { getRef } = React.useContext(DimensionContext);
   return (
-    <div
+    <ChildComponent
       className={classnames('DimensionContextConsumer', className)}
       ref={getRef}
     >
       {children}
-    </div>
+    </ChildComponent>
   );
 };
+
+class ChildComponent extends React.Component {
+  childRef = React.createRef();
+
+  elementRef = React.createRef();
+
+  render() {
+    const { children, className } = this.props;
+    return (
+      <div
+        ref={this.elementRef}
+        className={classnames('ChildComponent', className)}
+      >
+        {React.cloneElement(children, { ref: this.childRef })}
+      </div>
+    );
+  }
+}
 
 const withDimensions = (Component, className) => (props) => {
   return (
@@ -45,51 +63,106 @@ const withDimensions = (Component, className) => (props) => {
 };
 
 // working on breaking block
-const BreakingBlock = ({ children, className }) => {
-  const [breaking, setBreaking] = React.useState(false);
-  const [height, setHeight] = React.useState(null);
-
-  const updateLayout = (values) => {
-    console.log('Received updated layout', values);
-    setHeight(values.h);
-    // set
+class BreakingBlock extends React.Component {
+  state = {
+    breaking: false,
+    height: null,
+    heightFirstPart: null,
+    paddingTopSecondPart: null,
+    heightSecondPart: null,
   };
 
-  return (
-    <div className={className}>
-      {/* render the children */}
-      {!breaking && <div>{children}</div>}
-      <>
-        {/* render new layout if breaking */}
-        {breaking && (
-          <div>
-            <div className="BreakingBlock-start">{children}</div>
-            <div
-              className="BreakingBlock-end"
-              style={{ textTransform: 'uppercase' }}
-            >
-              {children}
+  updateLayout = (values) => {
+    const {
+      heightFirstPart,
+      paddingTopSecondPart,
+      heightSecondPart,
+      originalHeight,
+    } = values;
+    this.setState({
+      breaking: true,
+      height: originalHeight,
+      heightFirstPart,
+      paddingTopSecondPart,
+      heightSecondPart,
+    });
+  };
+
+  render() {
+    const { children, className } = this.props;
+    const {
+      breaking,
+      height,
+      heightFirstPart,
+      paddingTopSecondPart,
+      heightSecondPart,
+    } = this.state;
+
+    return (
+      <div className={className}>
+        {/* render the children */}
+        {!breaking && <div>{children}</div>}
+        <>
+          {/* render new layout if breaking */}
+          {breaking && (
+            <div style={{ height }}>
+              <BreakingBlockStart heightFirstPart={heightFirstPart}>
+                {children}
+              </BreakingBlockStart>
+              <BreakingBlockDivider
+                paddingTopSecondPart={paddingTopSecondPart}
+              />
+              <BreakingBlockEnd
+                heightSecondPart={heightSecondPart}
+                paddingTopSecondPart={paddingTopSecondPart}
+              >
+                {children}
+              </BreakingBlockEnd>
             </div>
-          </div>
-        )}
-      </>
-    </div>
-  );
-};
-const StyledBreakingBlock = styled(BreakingBlock)`
-  .BreakingBlock-start {
-    background: yellow;
-    height: 30%;
-    overflow: hidden;
-    position: relative;
+          )}
+        </>
+      </div>
+    );
   }
-  .BreakingBlock-end {
-    background: green;
-    height: 70%;
-    overflow: hidden;
-    position: relative;
-  }
+}
+
+const BreakingBlockStart = styled.div.attrs({
+  className: 'BreakingBlock-start',
+})`
+  height: ${({ heightFirstPart }) => heightFirstPart}px;
 `;
+
+const BreakingBlockDivider = styled.div`
+  height: ${({ paddingTopSecondPart }) => paddingTopSecondPart}px;
+  width: 100%;
+  background: gray;
+`;
+
+const BreakingBlockEnd = styled.div.attrs({
+  className: 'BreakingBlock-end',
+})`
+textTransform: 'uppercase'
+  height: ${({ heightSecondPart }) => heightSecondPart}px;
+  // padding-top: ${({ paddingTopSecondPart }) => paddingTopSecondPart}px;
+`;
+
+const StyledBreakingBlock = withDimensions(
+  styled(BreakingBlock)`
+    .BreakingBlock-start {
+      background: yellow;
+      height: 30%;
+      overflow: hidden;
+      position: relative;
+    }
+    .BreakingBlock-end {
+      background: green;
+      height: 70%;
+      overflow: hidden;
+      position: relative;
+    }
+  `,
+  'Can-Break'
+);
 
 export default withDimensions;
 export {

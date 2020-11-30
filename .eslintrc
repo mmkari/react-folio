@@ -3,6 +3,7 @@
   "extends": ["airbnb", "plugin:prettier/recommended"],
   "plugins": ["react", "jsx-a11y", "import"],
   "rules": {
+    "max-classes-per-file": [0],
     "linebreak-style": ["error", "windows"],
     "prettier/prettier": ["error"],
     "react/state-in-constructor": ["error", "never"],
