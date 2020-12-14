@@ -73,6 +73,7 @@ class BreakingBlock extends React.Component {
   };
 
   updateLayout = (values) => {
+    console.log('UPDATE LAYOUT CALLED WITH', values);
     const {
       heightFirstPart,
       paddingTopSecondPart,
@@ -81,7 +82,7 @@ class BreakingBlock extends React.Component {
     } = values;
     this.setState({
       breaking: true,
-      height: originalHeight,
+      height: heightFirstPart + paddingTopSecondPart + heightSecondPart, // originalHeight
       heightFirstPart,
       paddingTopSecondPart,
       heightSecondPart,
@@ -107,16 +108,17 @@ class BreakingBlock extends React.Component {
           {breaking && (
             <div style={{ height }}>
               <BreakingBlockStart heightFirstPart={heightFirstPart}>
-                {children}
+                <div className="StartContent">{children}</div>
               </BreakingBlockStart>
               <BreakingBlockDivider
                 paddingTopSecondPart={paddingTopSecondPart}
               />
               <BreakingBlockEnd
+                heightFirstPart={heightFirstPart}
                 heightSecondPart={heightSecondPart}
                 paddingTopSecondPart={paddingTopSecondPart}
               >
-                {children}
+                <div className="EndContent">{children}</div>
               </BreakingBlockEnd>
             </div>
           )}
@@ -130,33 +132,38 @@ const BreakingBlockStart = styled.div.attrs({
   className: 'BreakingBlock-start',
 })`
   height: ${({ heightFirstPart }) => heightFirstPart}px;
+
+  .StartContent {
+    position: relative;
+  }
 `;
 
 const BreakingBlockDivider = styled.div`
   height: ${({ paddingTopSecondPart }) => paddingTopSecondPart}px;
   width: 100%;
-  background: gray;
+  // background: gray;
 `;
 
 const BreakingBlockEnd = styled.div.attrs({
   className: 'BreakingBlock-end',
 })`
-textTransform: 'uppercase'
   height: ${({ heightSecondPart }) => heightSecondPart}px;
-  // padding-top: ${({ paddingTopSecondPart }) => paddingTopSecondPart}px;
+
+  .EndContent {
+    top: -${({ heightFirstPart }) => heightFirstPart}px;
+    position: relative;
+  }
 `;
 
 const StyledBreakingBlock = withDimensions(
   styled(BreakingBlock)`
     .BreakingBlock-start {
       background: yellow;
-      height: 30%;
       overflow: hidden;
       position: relative;
     }
     .BreakingBlock-end {
       background: green;
-      height: 70%;
       overflow: hidden;
       position: relative;
     }

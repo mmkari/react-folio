@@ -36,10 +36,19 @@ const PrintButton = styled.button.attrs({ className: 'PrintButton' })`
 `;
 
 const WhiteBox = styled.div.attrs({ className: 'BOX' })`
-  width: 70px;
-  height: 290px;
-  background: white;
-  float: left;
+  width: 100%;
+  height: 320px;
+  background-image: linear-gradient(
+    0deg,
+    #ee617d 25%,
+    #3d6f8e 25%,
+    #3d6f8e 50%,
+    #ee617d 50%,
+    #ee617d 75%,
+    orange 75%,
+    orange 100%
+  );
+  background-size: 100% 320px;
 `;
 
 class Examples extends React.Component {
@@ -61,7 +70,28 @@ class Examples extends React.Component {
           </PrintButton>
           <Container>
             <StyledBreakingBlock className="Can-Break">
+              <WhiteBox />
+            </StyledBreakingBlock>
+            <StyledBreakingBlock className="Can-Break">
               <Lorem />
+            </StyledBreakingBlock>
+            <StyledBreakingBlock className="Can-Break">
+              <Lorem />
+            </StyledBreakingBlock>
+            <StyledBreakingBlock className="Can-Break">
+              <Lorem />
+            </StyledBreakingBlock>
+            <StyledBreakingBlock className="Can-Break">
+              <WhiteBox />
+            </StyledBreakingBlock>
+            <StyledBreakingBlock className="Can-Break">
+              <WhiteBox />
+            </StyledBreakingBlock>
+            <StyledBreakingBlock className="Can-Break">
+              <Lorem />
+            </StyledBreakingBlock>
+            <StyledBreakingBlock className="Can-Break">
+              <WhiteBox />
             </StyledBreakingBlock>
             <StyledBreakingBlock className="Can-Break">
               <Lorem />
@@ -78,35 +108,6 @@ class Examples extends React.Component {
             <StyledBreakingBlock className="Can-Break">
               <Lorem />
             </StyledBreakingBlock>
-            <StyledBreakingBlock className="Can-Break">
-              <Lorem />
-            </StyledBreakingBlock>
-            <StyledBreakingBlock className="Can-Break">
-              <Lorem />
-            </StyledBreakingBlock>
-            <StyledBreakingBlock className="Can-Break">
-              <Lorem />
-            </StyledBreakingBlock>
-            <StyledBreakingBlock className="Can-Break">
-              <Lorem />
-            </StyledBreakingBlock>
-            <StyledBreakingBlock className="Can-Break">
-              <Lorem />
-            </StyledBreakingBlock>
-            <StyledBreakingBlock className="Can-Break">
-              <Lorem />
-            </StyledBreakingBlock>
-            <Lorem />
-            <Lorem />
-            <Lorem />
-            <Lorem />
-            <Lorem />
-            <Lorem />
-            <Lorem />
-            <Lorem />
-            <Lorem />
-            <Lorem />
-            <Lorem />
             <MeasuredLorem />
             <MeasuredLorem />
             <MeasuredLorem />
