@@ -157,6 +157,7 @@ const BreakingBlockEnd = styled.div.attrs({
 
 const StyledBreakingBlock = withDimensions(
   styled(BreakingBlock)`
+    overflow: auto;
     .BreakingBlock-start {
       background: yellow;
       overflow: hidden;
