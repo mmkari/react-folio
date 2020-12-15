@@ -1,8 +1,8 @@
 import * as React from 'react';
 import styled from 'styled-components';
 import Paged from '../src/Paged';
-import Lorem from './Lorem';
-import withDimensions, { BreakingBlock } from '../src/DimensionContext';
+import Lorem, { getLorem } from './Lorem';
+import withDimensions, { BreakingBlock, Text } from '../src/DimensionContext';
 
 const MeasuredLorem = withDimensions(Lorem, 'CANNOT_BREAK');
 
@@ -69,6 +69,7 @@ class Examples extends React.Component {
             PRINT ME!
           </PrintButton>
           <Container>
+            <Text>{getLorem()}</Text>
             <StyledBreakingBlock className="Can-Break">
               <WhiteBox />
             </StyledBreakingBlock>
@@ -105,6 +106,8 @@ class Examples extends React.Component {
             <StyledBreakingBlock className="Can-Break">
               <Lorem />
             </StyledBreakingBlock>
+            <Text>{getLorem()}</Text>
+
             <StyledBreakingBlock className="Can-Break">
               <Lorem />
             </StyledBreakingBlock>
