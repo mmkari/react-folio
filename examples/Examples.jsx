@@ -2,7 +2,8 @@ import * as React from 'react';
 import styled from 'styled-components';
 import Paged from '../src/Paged';
 import Lorem, { getLorem } from './Lorem';
-import withDimensions, { BreakingBlock, Text } from '../src/DimensionContext';
+import withDimensions, { BreakingBlock } from '../src/DimensionContext';
+import Text from '../src/Text';
 
 const MeasuredLorem = withDimensions(Lorem, 'CANNOT_BREAK');
 

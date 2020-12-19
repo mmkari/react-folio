@@ -171,32 +171,9 @@ const StyledBreakingBlock = withDimensions(
   'Can-Break'
 );
 
-const Text = ({ className, children, charMax = 103 }) => {
-  let rows = null;
-  if (typeof children === 'string') {
-    const regex = new RegExp(`.{1,${charMax}} `, 'g'); // match lines of upto 60 chars
-    rows = children.match(regex);
-  }
-
-  return (
-    <div className="TextBlock">
-      {rows &&
-        rows.map((row) => (
-          <DimensionContextConsumer className={className}>
-            <div className="TextBlock-row">{row && row.trim()}</div>
-          </DimensionContextConsumer>
-        ))}
-    </div>
-  );
-};
-const StyledText = styled(Text)`
-  background: #0e22df;
-`;
-
 export default withDimensions;
 export {
   DimensionContextProvider,
   DimensionContextConsumer,
   StyledBreakingBlock as BreakingBlock,
-  StyledText as Text,
 };
