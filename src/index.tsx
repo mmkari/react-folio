@@ -1,3 +1,4 @@
+export { default as Text } from './Text';
 export { default, default as Paged } from './Paged';
 export {
   default as withDimensions,
@@ -5,4 +6,3 @@ export {
   DimensionContextConsumer,
   BreakingBlock,
 } from './DimensionContext';
-export { default as Text } from './Text';
